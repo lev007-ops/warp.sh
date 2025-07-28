@@ -153,21 +153,21 @@ Install_Requirements_Debian() {
 Install_WARP_Client_Debian() {
     if [[ ${SysInfo_OS_Name_lowercase} = ubuntu ]]; then
         case ${SysInfo_OS_CodeName} in
-        bionic | focal | jammy) ;;
+        bionic | focal | jammy | oracular) ;;  # Add 'oracular' for Ubuntu 24.10
         *)
             log ERROR "This operating system is not supported."
             exit 1
-            ;;
-        esac
-    elif [[ ${SysInfo_OS_Name_lowercase} = debian ]]; then
-        case ${SysInfo_OS_CodeName} in
-        bookworm | buster | bullseye) ;;
-        *)
-            log ERROR "This operating system is not supported."
-            exit 1
-            ;;
-        esac
-    fi
+        ;;
+    esac
+elif [[ ${SysInfo_OS_Name_lowercase} = debian ]]; then
+    case ${SysInfo_OS_CodeName} in
+    bookworm | buster | bullseye) ;;
+    *)
+        log ERROR "This operating system is not supported."
+        exit 1
+        ;;
+    esac
+fi
     Install_Requirements_Debian
     curl https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ ${SysInfo_OS_CodeName} main" | tee /etc/apt/sources.list.d/cloudflare-client.list
